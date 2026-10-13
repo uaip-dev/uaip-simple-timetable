@@ -1,0 +1,21 @@
+{
+  "name": "uaip-simple-timetable",
+  "private": true,
+  "version": "0.1.0",
+  "description": "UAIP Simple Timetable for WordPress: class schedules and timetables with weekly, daily, monthly and list views.",
+  "license": "GPL-2.0-or-later",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "check": "tsc --noEmit -p src/front",
+    "zip": "node scripts/build.mjs && node scripts/make-zip.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "typescript": "6.0.3"
+  }
+}

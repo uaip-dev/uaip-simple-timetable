@@ -1,0 +1,17 @@
+# Dependencies and build output
+node_modules/
+plugin/build/
+dist/
+*.zip
+
+# Local dev environment
+.env
+dev/.data/
+dev/docker-compose.override.yml
+
+# Editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db

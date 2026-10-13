@@ -1,0 +1,78 @@
+/* Classic meta boxes, list columns and the block editor schedule panel. */
+
+.uaip-tt-box .uaip-tt-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  align-items: flex-end;
+}
+.uaip-tt-box fieldset.uaip-tt-row {
+  margin: 12px 0;
+}
+.uaip-tt-box legend {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.uaip-tt-box .notice.inline {
+  margin: 8px 0 12px;
+}
+
+.uaip-tt-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  vertical-align: -2px;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.2);
+}
+.column-uaip_tt_color {
+  width: 2em;
+}
+.uaip-tt-problem {
+  color: #b32d2e;
+}
+
+/* Block editor panel */
+.uaip-tt-panel .components-base-control,
+.uaip-tt-panel .components-radio-control {
+  margin-bottom: 16px;
+}
+.uaip-tt-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.uaip-tt-times .components-base-control {
+  margin-bottom: 0;
+}
+.uaip-tt-days {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 8px;
+}
+.uaip-tt-checklist {
+  display: grid;
+  gap: 4px;
+  max-height: 180px;
+  overflow: auto;
+}
+.uaip-tt-exdates {
+  margin: 0 0 8px;
+}
+.uaip-tt-exdates li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 2px 0;
+  border-bottom: 1px solid #f0f0f1;
+}
+.uaip-tt-exdate-add {
+  display: flex;
+  gap: 8px;
+}
+.uaip-tt-exdate-add input {
+  flex: 1;
+  min-width: 0;
+}
