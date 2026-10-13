@@ -17,6 +17,7 @@ final class Uaip_Timetable_Assets {
 	const FRONT_STYLE  = 'uaip-tt-front';
 	const FRONT_MODULE = 'uaip-tt-front';
 	const EDITOR       = 'uaip-tt-editor';
+	const BLOCK        = 'uaip-tt-block';
 	const ADMIN        = 'uaip-tt-admin';
 
 	/**
@@ -44,6 +45,14 @@ final class Uaip_Timetable_Assets {
 			true
 		);
 		wp_set_script_translations( self::EDITOR, 'uaip-simple-timetable' );
+		wp_register_script(
+			self::BLOCK,
+			UAIP_TT_URL . 'build/block/index.js',
+			array( 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-element', 'wp-i18n', 'wp-server-side-render' ),
+			$version,
+			true
+		);
+		wp_set_script_translations( self::BLOCK, 'uaip-simple-timetable' );
 		wp_register_script( self::ADMIN, UAIP_TT_URL . 'build/admin/index.js', array( 'wp-color-picker' ), $version, true );
 		wp_register_style( self::ADMIN, UAIP_TT_URL . 'build/admin/style.css', array( 'wp-color-picker' ), $version );
 	}
@@ -60,11 +69,13 @@ final class Uaip_Timetable_Assets {
 	}
 
 	/**
-	 * Enqueues the front-end style and script module.
+	 * Enqueues the front-end style and (optionally) the script module.
+	 *
+	 * @param bool $with_script Also load the script (not needed for the upcoming list).
 	 */
-	public static function enqueue_front() {
+	public static function enqueue_front( $with_script = true ) {
 		wp_enqueue_style( self::FRONT_STYLE );
-		if ( function_exists( 'wp_enqueue_script_module' ) ) {
+		if ( $with_script && function_exists( 'wp_enqueue_script_module' ) ) {
 			wp_enqueue_script_module( self::FRONT_MODULE );
 		}
 	}

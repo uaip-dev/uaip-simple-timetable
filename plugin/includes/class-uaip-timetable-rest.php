@@ -54,7 +54,7 @@ final class Uaip_Timetable_Rest {
 		);
 
 		$render_args = array();
-		foreach ( array( 'view', 'views', 'date', 'category', 'location', 'instructor', 'days', 'start', 'end', 'slot', 'scheme', 'typical', 'filters', 'list_days', 'fixed', 'instance', 'base' ) as $key ) {
+		foreach ( array( 'view', 'views', 'date', 'category', 'location', 'instructor', 'days', 'start', 'end', 'slot', 'scheme', 'typical', 'filters', 'list_days', 'subscribe', 'fixed', 'instance', 'base' ) as $key ) {
 			$render_args[ $key ] = $text;
 		}
 		$render_args['base']['sanitize_callback'] = 'esc_url_raw';
@@ -114,7 +114,7 @@ final class Uaip_Timetable_Rest {
 	 */
 	public function render( WP_REST_Request $request ) {
 		$raw = array();
-		foreach ( array( 'view', 'views', 'date', 'category', 'location', 'instructor', 'days', 'start', 'end', 'slot', 'scheme', 'typical', 'filters', 'list_days', 'fixed' ) as $key ) {
+		foreach ( array( 'view', 'views', 'date', 'category', 'location', 'instructor', 'days', 'start', 'end', 'slot', 'scheme', 'typical', 'filters', 'list_days', 'subscribe', 'fixed' ) as $key ) {
 			if ( null !== $request[ $key ] ) {
 				$raw[ $key ] = (string) $request[ $key ];
 			}

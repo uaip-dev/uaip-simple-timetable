@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "uaip-simple-timetable/upcoming",
+  "title": "Upcoming Classes",
+  "category": "widgets",
+  "icon": "clock",
+  "description": "A short list of the next classes or events from your timetable.",
+  "keywords": ["timetable", "upcoming", "next", "classes", "events"],
+  "textdomain": "uaip-simple-timetable",
+  "attributes": {
+    "count": { "type": "integer", "default": 5 },
+    "days": { "type": "integer", "default": 14 },
+    "category": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "location": { "type": "array", "items": { "type": "integer" }, "default": [] },
+    "instructor": { "type": "array", "items": { "type": "integer" }, "default": [] },
+    "showLocation": { "type": "boolean", "default": true },
+    "showInstructor": { "type": "boolean", "default": false }
+  },
+  "supports": {
+    "anchor": true,
+    "html": false,
+    "spacing": { "margin": true, "padding": true },
+    "typography": { "fontSize": true }
+  },
+  "editorScript": "uaip-tt-block",
+  "editorStyle": "uaip-tt-admin",
+  "style": "uaip-tt-front"
+}

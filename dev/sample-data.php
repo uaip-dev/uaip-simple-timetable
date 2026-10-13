@@ -136,7 +136,8 @@ foreach ( array(
 	'timetable'    => array( 'Timetable', '[uaip_timetable views="week,day,month,list"]' ),
 	'class-list'   => array( 'Class list', '[uaip_timetable view="list" list_days="7"]' ),
 	'typical-week' => array( 'Typical week', '[uaip_timetable typical="yes" scheme="modern" filters="no"]' ),
-	'yoga'         => array( 'Yoga classes', '[uaip_timetable category="yoga" view="list"]' ),
+	'yoga'         => array( 'Yoga classes', '<!-- wp:shortcode -->[uaip_timetable category="yoga" view="list"]<!-- /wp:shortcode -->' ),
+	'blocks'       => array( 'Blocks', '<!-- wp:uaip-simple-timetable/timetable {"views":["week","month","list"],"align":"wide"} /--><!-- wp:heading --><h2 class="wp-block-heading">Next up</h2><!-- /wp:heading --><!-- wp:uaip-simple-timetable/upcoming {"count":4,"showInstructor":true} /-->' ),
 ) as $uaip_dev_slug => $uaip_dev_page ) {
 	wp_insert_post(
 		array(
@@ -144,7 +145,7 @@ foreach ( array(
 			'post_status'  => 'publish',
 			'post_name'    => $uaip_dev_slug,
 			'post_title'   => $uaip_dev_page[0],
-			'post_content' => '<!-- wp:shortcode -->' . $uaip_dev_page[1] . '<!-- /wp:shortcode -->',
+			'post_content' => 0 === strpos( $uaip_dev_page[1], '<!--' ) ? $uaip_dev_page[1] : '<!-- wp:shortcode -->' . $uaip_dev_page[1] . '<!-- /wp:shortcode -->',
 		)
 	);
 }

@@ -25,6 +25,9 @@ final class Uaip_Timetable_Occurrences {
 	/** Longest range one call may expand, in days. */
 	const MAX_RANGE_DAYS = 400;
 
+	/** Bump when the snapshot's shape changes, so cached copies are rebuilt. */
+	const SCHEMA = 2;
+
 	/** Most events loaded into the snapshot. */
 	const MAX_EVENTS = 2000;
 
@@ -398,7 +401,7 @@ final class Uaip_Timetable_Occurrences {
 		$key = 'uaip_tt_snapshot_' . get_option( self::SALT_OPTION, '0' );
 		if ( ! self::$dirty ) {
 			$cached = get_transient( $key );
-			if ( is_array( $cached ) && isset( $cached['events'], $cached['version'] ) && UAIP_TT_VERSION === $cached['version'] ) {
+			if ( is_array( $cached ) && isset( $cached['events'], $cached['schema'], $cached['version'] ) && self::SCHEMA === $cached['schema'] && UAIP_TT_VERSION === $cached['version'] ) {
 				self::$snapshot = $cached;
 				return $cached;
 			}
@@ -481,6 +484,7 @@ final class Uaip_Timetable_Occurrences {
 				'excerpt'     => post_password_required( $post ) ? '' : wp_strip_all_tags( get_the_excerpt( $post ) ),
 				'url'         => (string) get_post_meta( $post->ID, Uaip_Timetable_Event::META_URL, true ),
 				'permalink'   => get_permalink( $post ),
+				'modified'    => $post->post_modified_gmt,
 				'color'       => '' !== $color ? $color : Uaip_Timetable_Post_Types::DEFAULT_COLOR,
 				'location'    => (int) get_post_meta( $post->ID, Uaip_Timetable_Event::META_LOCATION, true ),
 				'instructors' => is_array( $instructor_ids ) ? array_map( 'intval', $instructor_ids ) : array(),
@@ -490,6 +494,7 @@ final class Uaip_Timetable_Occurrences {
 
 		return array(
 			'version'     => UAIP_TT_VERSION,
+			'schema'      => self::SCHEMA,
 			'events'      => $events,
 			'locations'   => $locations,
 			'instructors' => $instructors,

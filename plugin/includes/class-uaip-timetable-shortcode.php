@@ -28,7 +28,8 @@ final class Uaip_Timetable_Shortcode {
 	 *
 	 * Attributes: view (week|day|month|list), views (switcher, e.g. "week,list"), date (Y-m-d),
 	 * category (slugs), location (IDs), instructor (IDs), days (e.g. "mon,tue"), start/end
-	 * (H:i), slot (15|30|60), scheme, typical (yes|no), filters (yes|no), list_days.
+	 * (H:i), slot (15|30|60), scheme, typical (yes|no), filters (yes|no), list_days,
+	 * subscribe (yes|no: the "Subscribe in your calendar app" link).
 	 *
 	 * @param array|string $atts Attributes.
 	 * @return string
@@ -50,6 +51,7 @@ final class Uaip_Timetable_Shortcode {
 				'typical'    => '',
 				'filters'    => '',
 				'list_days'  => '',
+				'subscribe'  => '',
 			),
 			is_array( $atts ) ? $atts : array(),
 			self::TAG

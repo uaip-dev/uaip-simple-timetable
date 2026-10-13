@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "uaip-simple-timetable/timetable",
+  "title": "Timetable",
+  "category": "widgets",
+  "icon": "calendar-alt",
+  "description": "Show your classes as a week grid, day, month or list, with filters and event details.",
+  "keywords": ["timetable", "schedule", "classes", "calendar", "events"],
+  "textdomain": "uaip-simple-timetable",
+  "attributes": {
+    "view": { "type": "string", "default": "" },
+    "views": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "category": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "location": { "type": "array", "items": { "type": "integer" }, "default": [] },
+    "instructor": { "type": "array", "items": { "type": "integer" }, "default": [] },
+    "days": { "type": "array", "items": { "type": "integer" }, "default": [] },
+    "start": { "type": "string", "default": "" },
+    "end": { "type": "string", "default": "" },
+    "slot": { "type": "integer", "default": 0 },
+    "scheme": { "type": "string", "default": "" },
+    "typical": { "type": "boolean", "default": false },
+    "filters": { "type": "boolean", "default": true },
+    "listDays": { "type": "integer", "default": 0 },
+    "subscribe": { "type": "boolean", "default": true }
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "anchor": true,
+    "html": false,
+    "spacing": { "margin": true }
+  },
+  "editorScript": "uaip-tt-block",
+  "editorStyle": "uaip-tt-admin",
+  "style": "uaip-tt-front",
+  "viewScriptModule": "uaip-tt-front"
+}

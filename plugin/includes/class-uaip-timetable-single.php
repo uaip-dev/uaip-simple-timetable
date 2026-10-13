@@ -125,6 +125,11 @@ final class Uaip_Timetable_Single {
 					</dd>
 				<?php endif; ?>
 			</dl>
+			<?php if ( Uaip_Timetable_Settings::get( 'ics' ) && null !== Uaip_Timetable_Ics::first_date( $rule ) ) : ?>
+				<p class="uaip-tt-single__ics">
+					<a href="<?php echo esc_url( Uaip_Timetable_Ics::feed_url( array( 'event' => $post->ID ) ) ); ?>" download><?php esc_html_e( 'Add to calendar', 'uaip-simple-timetable' ); ?></a>
+				</p>
+			<?php endif; ?>
 		</div>
 		<?php
 		return (string) ob_get_clean();

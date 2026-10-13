@@ -30,6 +30,19 @@ UAIP Simple Timetable shows your classes, lessons or sessions as a clear timetab
 
 Visitors can move between weeks, months or days and switch views without reloading the page. On phones, the week and month views turn into a list per day.
 
+= Blocks, shortcode and widget =
+
+* **Timetable block** with a live preview and settings for the view, filters, days, hours and colours.
+* **Upcoming Classes block** for the next few classes, e.g. on the home page or in a sidebar.
+* A classic **Upcoming Classes widget** for themes with widget areas.
+* The `[uaip_timetable]` shortcode for page builders and the classic editor.
+
+= Calendar apps =
+
+* Visitors can subscribe to the timetable in Google Calendar, Apple Calendar or Outlook (iCal feed), filtered the same way as the timetable they are looking at.
+* Every event has an "Add to calendar" download.
+* Repeating events, cancelled dates and daylight-saving changes come through correctly.
+
 = Locations, instructors and categories =
 
 * Give each event a location and one or more instructors.
@@ -61,6 +74,7 @@ Add a timetable anywhere with `[uaip_timetable]`. Options:
 * `list_days`: how many days the list view shows (default 14).
 * `scheme`: `default`, `modern`, `minimal`, `dark` or `warm`.
 * `date`: the date to start from (YYYY-MM-DD), default today.
+* `subscribe`: `no` hides the "Subscribe in your calendar app" link.
 
 Example: `[uaip_timetable views="week,list" category="yoga" days="mon,tue,wed,thu,fri"]`
 
@@ -90,6 +104,10 @@ Open the event and add the date under "Cancelled dates". It disappears from the 
 
 Yes. Use `category`, `location` or `instructor` in the shortcode, for example `[uaip_timetable category="yoga"]`. Visitors can't change filters you set this way.
 
+= How do visitors add the timetable to their own calendar? =
+
+Below each timetable there is a "Subscribe in your calendar app" link. It follows the timetable's filters, so a yoga-only timetable gives a yoga-only calendar. The feed address is `/feed/uaip-timetable/` on your site; add `?uaip_tt_category=yoga` (category slugs), `uaip_tt_location` or `uaip_tt_instructor` (IDs) to filter it. Only published events are included.
+
 = Does the plugin send data anywhere? =
 
 No. It makes no requests to other servers and stores nothing about your visitors.
@@ -101,4 +119,4 @@ No. Everything is free.
 == Changelog ==
 
 = 0.1.0 =
-* First version: repeating and one-off events, locations, instructors, categories with colours, week/day/month/list views, filters, event details popup, shortcode.
+* First version: repeating and one-off events, locations, instructors, categories with colours, week/day/month/list views, filters, event details popup, Timetable and Upcoming Classes blocks, widget, shortcode, iCal feed and "Add to calendar".

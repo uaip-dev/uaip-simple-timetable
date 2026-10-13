@@ -799,3 +799,67 @@
     display: none;
   }
 }
+
+/* ---------- Footer (calendar subscription) ---------- */
+
+.uaip-tt__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid var(--uaip-tt-border);
+  font-size: 0.8125rem;
+}
+.uaip-tt__footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--uaip-tt-muted);
+}
+.uaip-tt__footer a:hover {
+  color: var(--uaip-tt-accent);
+}
+.uaip-tt-details__more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+}
+.uaip-tt-dialog .uaip-tt-details__ics {
+  font-size: 0.875rem;
+}
+
+/* ---------- Upcoming classes ---------- */
+
+.uaip-tt-upcoming {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.uaip-tt-upcoming__item {
+  margin: 0 0 0.6em;
+  padding-left: 0.75em;
+  border-left: 4px solid var(--uaip-tt-bg, currentColor);
+}
+.uaip-tt-upcoming__title {
+  display: block;
+  font-weight: 600;
+}
+.uaip-tt-upcoming__when,
+.uaip-tt-upcoming__meta {
+  display: block;
+  font-size: 0.875em;
+  opacity: 0.8;
+}
+.uaip-tt-upcoming__empty {
+  opacity: 0.8;
+}
+.uaip-tt-single__ics {
+  margin: 12px 0 0;
+}
+
+/* Block editor preview: the script doesn't run there, so hide the no-JS submit button. */
+.editor-styles-wrapper .uaip-tt__apply {
+  display: none;
+}

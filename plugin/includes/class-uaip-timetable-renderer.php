@@ -113,7 +113,8 @@ final class Uaip_Timetable_Renderer {
 		$a['list_days'] = $list_days >= 1 && $list_days <= 90 ? $list_days : $settings['list_days'];
 
 		$a['typical'] = self::flag( isset( $raw['typical'] ) ? $raw['typical'] : false, false );
-		$a['filters'] = self::flag( isset( $raw['filters'] ) ? $raw['filters'] : true, true );
+		$a['filters']   = self::flag( isset( $raw['filters'] ) ? $raw['filters'] : true, true );
+		$a['subscribe'] = self::flag( isset( $raw['subscribe'] ) ? $raw['subscribe'] : true, true );
 
 		// Dimensions fixed by the site owner (not changeable by the visitor's filters).
 		$fixed = array();
@@ -276,8 +277,127 @@ final class Uaip_Timetable_Renderer {
 				}
 				?>
 			</div>
+			<?php self::footer( $attrs ); ?>
 			<div class="uaip-tt__status screen-reader-text" role="status" aria-live="polite"></div>
 		</div>
+		<?php
+		return (string) ob_get_clean();
+	}
+
+	/**
+	 * "Subscribe in your calendar app" link for the timetable's filters.
+	 *
+	 * @param array<string,mixed> $attrs Normalised attributes.
+	 */
+	private static function footer( array $attrs ) {
+		if ( ! $attrs['subscribe'] || ! Uaip_Timetable_Settings::get( 'ics' ) ) {
+			return;
+		}
+		$feed = Uaip_Timetable_Ics::feed_url(
+			array(
+				'category'   => $attrs['category'],
+				'location'   => $attrs['location'],
+				'instructor' => $attrs['instructor'],
+			)
+		);
+		$webcal = preg_replace( '#^https?://#', 'webcal://', $feed );
+		?>
+		<div class="uaip-tt__footer">
+			<a class="uaip-tt__subscribe" href="<?php echo esc_url( (string) $webcal, array( 'webcal' ) ); ?>">
+				<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M19 4h-2V2h-2v2H9V2H7v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 15H5V9h14v10Zm-8-8h2v3h3v2h-3v3h-2v-3H8v-2h3v-3Z" fill="currentColor"/></svg>
+				<?php esc_html_e( 'Subscribe in your calendar app', 'uaip-simple-timetable' ); ?>
+			</a>
+			<a class="uaip-tt__ics" href="<?php echo esc_url( $feed ); ?>" download><?php esc_html_e( 'Download .ics', 'uaip-simple-timetable' ); ?></a>
+		</div>
+		<?php
+	}
+
+	/**
+	 * The next few occurrences as a compact list (Upcoming Classes block and widget).
+	 *
+	 * @param array<string,mixed> $args {
+	 *     @type int      $count           How many (1–20).
+	 *     @type int      $days            How far ahead to look (1–90).
+	 *     @type string[] $category        Category slugs.
+	 *     @type int[]    $location        Location IDs.
+	 *     @type int[]    $instructor      Instructor IDs.
+	 *     @type bool     $show_location   Show the location.
+	 *     @type bool     $show_instructor Show the instructors.
+	 * }
+	 * @return string HTML.
+	 */
+	public static function upcoming( array $args ) {
+		$count = min( 20, max( 1, isset( $args['count'] ) ? (int) $args['count'] : 5 ) );
+		$days  = min( 90, max( 1, isset( $args['days'] ) ? (int) $args['days'] : 14 ) );
+		$attrs = self::normalize(
+			array(
+				'category'   => isset( $args['category'] ) ? $args['category'] : '',
+				'location'   => isset( $args['location'] ) ? $args['location'] : '',
+				'instructor' => isset( $args['instructor'] ) ? $args['instructor'] : '',
+			)
+		);
+
+		$now   = new DateTimeImmutable( 'now', wp_timezone() );
+		$today = $now->format( 'Y-m-d' );
+		$items = Uaip_Timetable_Occurrences::between(
+			$today,
+			Uaip_Timetable_Occurrences::add_days( $today, $days - 1 ),
+			array(
+				'category'   => $attrs['category'],
+				'location'   => $attrs['location'],
+				'instructor' => $attrs['instructor'],
+			)
+		);
+		$upcoming = array();
+		foreach ( $items as $item ) {
+			// Skip what has already finished today.
+			if ( new DateTimeImmutable( $item['end_iso'] ) > $now ) {
+				$upcoming[] = $item;
+			}
+			if ( count( $upcoming ) >= $count ) {
+				break;
+			}
+		}
+
+		if ( ! $upcoming ) {
+			return '<p class="uaip-tt-upcoming__empty">' . esc_html__( 'Nothing coming up.', 'uaip-simple-timetable' ) . '</p>';
+		}
+		$tomorrow = Uaip_Timetable_Occurrences::add_days( $today, 1 );
+
+		ob_start();
+		?>
+		<ul class="uaip-tt-upcoming">
+			<?php foreach ( $upcoming as $item ) : ?>
+				<?php
+				if ( $item['date'] === $today ) {
+					$day = __( 'Today', 'uaip-simple-timetable' );
+				} elseif ( $item['date'] === $tomorrow ) {
+					$day = __( 'Tomorrow', 'uaip-simple-timetable' );
+				} else {
+					$day = self::format_date( $item['date'], _x( 'D j M', 'timetable short date format', 'uaip-simple-timetable' ) );
+				}
+				$meta = array();
+				if ( ! empty( $args['show_location'] ) && $item['location'] ) {
+					$meta[] = $item['location']['title'];
+				}
+				if ( ! empty( $args['show_instructor'] ) && $item['instructors'] ) {
+					$meta[] = wp_sprintf( '%l', wp_list_pluck( $item['instructors'], 'title' ) );
+				}
+				?>
+				<li class="uaip-tt-upcoming__item" style="<?php echo esc_attr( '--uaip-tt-bg:' . $item['color'] ); ?>">
+					<a class="uaip-tt-upcoming__title" href="<?php echo esc_url( '' !== $item['url'] ? $item['url'] : $item['permalink'] ); ?>"><?php echo esc_html( $item['title'] ); ?></a>
+					<time class="uaip-tt-upcoming__when" datetime="<?php echo esc_attr( $item['start_iso'] ); ?>">
+						<?php
+						/* translators: 1: day (e.g. "Today" or "Tue 13 Oct"), 2: time range */
+						echo esc_html( sprintf( __( '%1$s, %2$s', 'uaip-simple-timetable' ), $day, Uaip_Timetable_Event::time_range( $item['start'], $item['end'] ) ) );
+						?>
+					</time>
+					<?php if ( $meta ) : ?>
+						<span class="uaip-tt-upcoming__meta"><?php echo esc_html( implode( ' · ', $meta ) ); ?></span>
+					<?php endif; ?>
+				</li>
+			<?php endforeach; ?>
+		</ul>
 		<?php
 		return (string) ob_get_clean();
 	}
@@ -890,7 +1010,12 @@ final class Uaip_Timetable_Renderer {
 		<?php if ( '' !== $item['excerpt'] ) : ?>
 			<p class="uaip-tt-details__excerpt"><?php echo esc_html( $item['excerpt'] ); ?></p>
 		<?php endif; ?>
-		<p class="uaip-tt-details__more"><a href="<?php echo esc_url( $href ); ?>"><?php esc_html_e( 'More details', 'uaip-simple-timetable' ); ?></a></p>
+		<p class="uaip-tt-details__more">
+			<a href="<?php echo esc_url( $href ); ?>"><?php esc_html_e( 'More details', 'uaip-simple-timetable' ); ?></a>
+			<?php if ( Uaip_Timetable_Settings::get( 'ics' ) ) : ?>
+				<a class="uaip-tt-details__ics" href="<?php echo esc_url( Uaip_Timetable_Ics::feed_url( array( 'event' => $item['event_id'] ) ) ); ?>" download><?php esc_html_e( 'Add to calendar', 'uaip-simple-timetable' ); ?></a>
+			<?php endif; ?>
+		</p>
 		<?php
 	}
 

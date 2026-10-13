@@ -1,6 +1,7 @@
 // Builds the plugin's scripts and styles into plugin/build/:
 //   front/   Script Module (index.js) + style.css for the timetable on the site
 //   editor/  block editor sidebar panel for events (classic script using wp.* globals)
+//   block/   Timetable and Upcoming Classes blocks (classic script using wp.* globals)
 //   admin/   small helpers for the classic admin screens (colour pickers, meta box fallback)
 // Usage: node scripts/build.mjs [--watch]
 import * as esbuild from "esbuild";
@@ -35,6 +36,12 @@ const configs = [
     ...common,
     entryPoints: { index: join(root, "src", "editor", "index.js") },
     outdir: join(out, "editor"),
+    format: "iife",
+  },
+  {
+    ...common,
+    entryPoints: { index: join(root, "src", "block", "index.js") },
+    outdir: join(out, "block"),
     format: "iife",
   },
   {

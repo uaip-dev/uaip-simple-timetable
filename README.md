@@ -13,6 +13,7 @@ Maintained by [UAIP](https://uaip.dev/) (WordPress.org: `uaip`).
 | `plugin/` | The WordPress plugin (PHP). `plugin/build/` is generated. |
 | `src/front/` | Front-end script (TypeScript Script Module) and styles. |
 | `src/editor/` | Block editor "Schedule" panel for events (uses the `wp.*` globals). |
+| `src/block/` | Timetable and Upcoming Classes blocks (editor side). |
 | `src/admin/` | Classic admin helpers (colour pickers, meta box). |
 | `tests/` | Occurrence engine tests (plain PHP). |
 | `dev/` | Docker setup for a local WordPress test site with sample data. |
@@ -39,12 +40,13 @@ sh setup.sh       # installs WordPress, activates the plugin, adds a sample gym 
 ```
 
 The site runs at http://localhost:8096 (user `admin`, password in `dev/.data/admin-password.txt`).
-Sample pages: `/timetable/`, `/class-list/`, `/typical-week/`, `/yoga/`.
+Sample pages: `/timetable/`, `/class-list/`, `/typical-week/`, `/yoga/`, `/blocks/`. iCal feed: `/feed/uaip-timetable/`.
 
-Run the engine tests in the container:
+Run the tests in the container:
 
 ```sh
 docker compose -f dev/docker-compose.yml exec wordpress php /uaip-tests/occurrences-test.php
+docker compose -f dev/docker-compose.yml exec wordpress php /uaip-tests/ics-test.php
 ```
 
 ## How it works
@@ -57,6 +59,8 @@ docker compose -f dev/docker-compose.yml exec wordpress php /uaip-tests/occurren
 - `Uaip_Timetable_Renderer` renders the views as plain HTML that works without JavaScript.
   The front-end script fetches re-rendered HTML from `GET /wp-json/uaip-simple-timetable/v1/render`
   for navigation and filters.
+- `Uaip_Timetable_Ics` serves the iCal feed (`?feed=uaip-timetable`): one VEVENT per event with
+  `RRULE`/`EXDATE` in the site timezone and a generated `VTIMEZONE`. Only published events.
 
 ## License
 

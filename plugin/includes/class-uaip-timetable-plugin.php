@@ -53,6 +53,14 @@ final class Uaip_Timetable_Plugin {
 		( new Uaip_Timetable_Occurrences() )->register_hooks();
 		( new Uaip_Timetable_Assets() )->register_hooks();
 		( new Uaip_Timetable_Shortcode() )->register_hooks();
+		( new Uaip_Timetable_Block() )->register_hooks();
+		( new Uaip_Timetable_Ics() )->register_hooks();
+		add_action(
+			'widgets_init',
+			static function () {
+				register_widget( 'Uaip_Timetable_Widget' );
+			}
+		);
 		( new Uaip_Timetable_Rest() )->register_hooks();
 		( new Uaip_Timetable_Single() )->register_hooks();
 
@@ -66,6 +74,7 @@ final class Uaip_Timetable_Plugin {
 	 */
 	public static function activate() {
 		Uaip_Timetable_Post_Types::register_types();
+		Uaip_Timetable_Ics::add_feed();
 		flush_rewrite_rules();
 	}
 }
