@@ -162,5 +162,18 @@ check( 'text on black is white', '#ffffff', Uaip_Timetable_Occurrences::text_col
 check( 'text on WP blue is white', '#ffffff', Uaip_Timetable_Occurrences::text_color( '#2271b1' ) );
 check( 'text on yellow is dark', '#1d2327', Uaip_Timetable_Occurrences::text_color( '#ffd84d' ) );
 
+// Readable event backgrounds (WCAG AA 4.5:1 for the label text).
+$contrast = static function ( $a, $b ) {
+	$la = Uaip_Timetable_Occurrences::luminance( $a );
+	$lb = Uaip_Timetable_Occurrences::luminance( $b );
+	return ( max( $la, $lb ) + 0.05 ) / ( min( $la, $lb ) + 0.05 );
+};
+check( 'readable background keeps WP blue', '#2271b1', Uaip_Timetable_Occurrences::readable_background( '#2271B1' ) );
+check( 'readable background keeps yellow (dark text)', '#ffd84d', Uaip_Timetable_Occurrences::readable_background( '#ffd84d' ) );
+foreach ( array( '#d9641c', '#2e8540', '#00a0a0', '#c2367a', '#888888', '#ff0000' ) as $c ) {
+	$bg = Uaip_Timetable_Occurrences::readable_background( $c );
+	check( "label on $c (as $bg) reaches 4.5:1", true, $contrast( $bg, Uaip_Timetable_Occurrences::text_color( $bg ) ) >= 4.5 );
+}
+
 echo "\n" . ( $count - $failures ) . "/$count passed\n";
 exit( $failures ? 1 : 0 );

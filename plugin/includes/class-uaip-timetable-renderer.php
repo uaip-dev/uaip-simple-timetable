@@ -384,11 +384,11 @@ final class Uaip_Timetable_Renderer {
 					$meta[] = wp_sprintf( '%l', wp_list_pluck( $item['instructors'], 'title' ) );
 				}
 				?>
-				<li class="uaip-tt-upcoming__item" style="<?php echo esc_attr( '--uaip-tt-bg:' . $item['color'] ); ?>">
+				<li class="uaip-tt-upcoming__item" style="<?php echo esc_attr( '--uaip-tt-bg:' . $item['bg_color'] ); ?>">
 					<a class="uaip-tt-upcoming__title" href="<?php echo esc_url( '' !== $item['url'] ? $item['url'] : $item['permalink'] ); ?>"><?php echo esc_html( $item['title'] ); ?></a>
 					<time class="uaip-tt-upcoming__when" datetime="<?php echo esc_attr( $item['start_iso'] ); ?>">
 						<?php
-						/* translators: 1: day (e.g. "Today" or "Tue 13 Oct"), 2: time range */
+						/* translators: 1: date or day (e.g. "Tuesday 13 October" or "Today"), 2: time range */
 						echo esc_html( sprintf( __( '%1$s, %2$s', 'uaip-simple-timetable' ), $day, Uaip_Timetable_Event::time_range( $item['start'], $item['end'] ) ) );
 						?>
 					</time>
@@ -465,7 +465,9 @@ final class Uaip_Timetable_Renderer {
 		$today = wp_date( 'Y-m-d' );
 		?>
 		<div class="uaip-tt__toolbar">
-			<?php if ( ! $attrs['typical'] ) : ?>
+			<?php if ( $attrs['typical'] ) : ?>
+				<h2 class="uaip-tt__heading screen-reader-text"><?php esc_html_e( 'Weekly timetable', 'uaip-simple-timetable' ); ?></h2>
+			<?php else : ?>
 				<div class="uaip-tt__nav">
 					<?php
 					self::nav_link( $attrs, $instance, $base, array( 'date' => self::step( $attrs, -1 ) ), 'prev', self::nav_label( $attrs['view'], -1 ) );
@@ -857,7 +859,7 @@ final class Uaip_Timetable_Renderer {
 								<a class="uaip-tt-month__date" href="<?php echo esc_url( self::nav_url( $attrs, $instance, $base, array( 'view' => 'day', 'date' => $date ) ) ); ?>"
 									data-nav="<?php echo esc_attr( (string) wp_json_encode( array( 'view' => 'day', 'date' => $date ) ) ); ?>"
 									<?php echo $date === $today ? 'aria-current="date"' : ''; ?>>
-									<span class="uaip-tt-month__num"><?php echo esc_html( self::format_date( $date, 'j' ) ); ?></span>
+									<span class="uaip-tt-month__num" aria-hidden="true"><?php echo esc_html( self::format_date( $date, 'j' ) ); ?></span>
 									<span class="uaip-tt-month__full"><?php echo esc_html( self::format_date( $date, _x( 'l j F', 'timetable list date format', 'uaip-simple-timetable' ) ) ); ?></span>
 								</a>
 								<?php if ( $day ) : ?>
@@ -931,7 +933,7 @@ final class Uaip_Timetable_Renderer {
 	 * @param bool                $dated     Whether to show the date in the details.
 	 */
 	private static function event( array $item, $placement, $dated ) {
-		$style   = sprintf( '--uaip-tt-bg:%s;--uaip-tt-fg:%s;', $item['color'], $item['text_color'] ) . $placement;
+		$style   = sprintf( '--uaip-tt-bg:%s;--uaip-tt-fg:%s;', $item['bg_color'], $item['text_color'] ) . $placement;
 		$href    = '' !== $item['url'] ? $item['url'] : $item['permalink'];
 		$details = 'uaip-tt-d-' . ( ++self::$details );
 		$meta    = array();
@@ -969,7 +971,7 @@ final class Uaip_Timetable_Renderer {
 		$href = '' !== $item['url'] ? $item['url'] : $item['permalink'];
 		$when = Uaip_Timetable_Event::time_range( $item['start'], $item['end'] );
 		if ( $dated ) {
-			/* translators: 1: date, 2: time range */
+			/* translators: 1: date or day (e.g. "Tuesday 13 October" or "Today"), 2: time range */
 			$when = sprintf( __( '%1$s, %2$s', 'uaip-simple-timetable' ), self::format_date( $item['date'], _x( 'l j F', 'timetable list date format', 'uaip-simple-timetable' ) ), $when );
 		}
 		?>

@@ -54,8 +54,9 @@ Visitors can move between weeks, months or days and switch views without reloadi
 = Built for every site =
 
 * Works without JavaScript; the script only adds in-place navigation and the details popup.
-* Keyboard and screen-reader friendly, with automatic text colours that keep event labels readable.
+* Keyboard and screen-reader friendly and tested against WCAG 2.2 AA. Event colours are adjusted where needed so their labels stay readable.
 * Five colour schemes: default, modern, minimal, dark and warm.
+* Settings for time format, first day of the week, default view, grid lines, colour scheme and public pages, all under Timetable → Settings.
 * No external services, no tracking, no cookies.
 
 = Shortcode =
@@ -112,9 +113,44 @@ Below each timetable there is a "Subscribe in your calendar app" link. It follow
 
 No. It makes no requests to other servers and stores nothing about your visitors.
 
+= Where are the settings? =
+
+Under Timetable → Settings: time format and first day of the week (by default the same as your WordPress settings), the default view and colour scheme, public location and instructor pages, the calendar feed, and whether to delete the timetable when the plugin is deleted.
+
+= Can I have several timetables on one page? =
+
+Yes. Each one has its own navigation and filters.
+
+= Which timezone are the times in? =
+
+Your site's timezone (Settings → General). Events at 18:00 stay at 18:00 when the clocks change. Calendar apps show them in each visitor's own timezone.
+
+= Will it match my theme? =
+
+The timetable uses your theme's fonts and has five colour schemes. Wide and full width alignments are supported in block themes.
+
+= What happens to my timetable if I delete the plugin? =
+
+It is kept, unless you tick "Also delete all events…" under Timetable → Settings first.
+
 = Is there a premium version? =
 
 No. Everything is free.
+
+== Screenshots ==
+
+1. Week view with colour-coded categories and overlapping classes side by side.
+2. Event details popup with location, instructor and "Add to calendar".
+3. Month view.
+4. List view and the Upcoming Classes block.
+5. On a phone: the week as a list per day.
+6. The Schedule panel when editing an event.
+7. The Timetable block and its settings in the editor.
+8. Settings.
+
+== Privacy ==
+
+UAIP Simple Timetable does not collect, store or send any personal data about your visitors and sets no cookies. It makes no requests to other servers. Instructor contact details are only shown if you enter them and make instructor pages public.
 
 == Changelog ==
 

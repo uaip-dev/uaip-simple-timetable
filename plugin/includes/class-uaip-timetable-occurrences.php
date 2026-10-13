@@ -348,7 +348,8 @@ final class Uaip_Timetable_Occurrences {
 			'url'         => $event['url'],
 			'permalink'   => $event['permalink'],
 			'color'       => $event['color'],
-			'text_color'  => self::text_color( $event['color'] ),
+			'bg_color'    => self::readable_background( $event['color'] ),
+			'text_color'  => self::text_color( self::readable_background( $event['color'] ) ),
 			'repeats'     => 'weekly' === $event['rule']['repeat'],
 			'location'    => $location,
 			'instructors' => $instructors,
@@ -523,15 +524,15 @@ final class Uaip_Timetable_Occurrences {
 	}
 
 	/**
-	 * Black or white text, whichever has the higher WCAG contrast on the background.
+	 * Relative luminance (WCAG 2) of a `#rrggbb` colour.
 	 *
-	 * @param string $hex Background `#rrggbb`.
-	 * @return string
+	 * @param string $hex Colour.
+	 * @return float|null
 	 */
-	public static function text_color( $hex ) {
+	public static function luminance( $hex ) {
 		$hex = ltrim( (string) $hex, '#' );
 		if ( 6 !== strlen( $hex ) || ! ctype_xdigit( $hex ) ) {
-			return '#ffffff';
+			return null;
 		}
 		$lum = 0.0;
 		foreach ( array( 0 => 0.2126, 2 => 0.7152, 4 => 0.0722 ) as $offset => $weight ) {
@@ -539,7 +540,49 @@ final class Uaip_Timetable_Occurrences {
 			$c    = $c <= 0.04045 ? $c / 12.92 : pow( ( $c + 0.055 ) / 1.055, 2.4 );
 			$lum += $weight * $c;
 		}
-		// Contrast with black is (L + 0.05) / 0.05, with white 1.05 / (L + 0.05); equal at L ≈ 0.179.
-		return $lum > 0.179 ? '#1d2327' : '#ffffff';
+		return $lum;
+	}
+
+	/**
+	 * The event colour, darkened just enough that white or dark text on it reaches the
+	 * WCAG AA contrast of 4.5:1 (mid-tones such as orange reach neither as they are).
+	 *
+	 * @param string $hex Event colour `#rrggbb`.
+	 * @return string
+	 */
+	public static function readable_background( $hex ) {
+		$lum = self::luminance( $hex );
+		if ( null === $lum ) {
+			return Uaip_Timetable_Post_Types::DEFAULT_COLOR;
+		}
+		$dark = self::luminance( '#1d2327' );
+		if ( 1.05 / ( $lum + 0.05 ) >= 4.5 || ( $lum + 0.05 ) / ( $dark + 0.05 ) >= 4.5 ) {
+			return strtolower( '#' . ltrim( $hex, '#' ) );
+		}
+		$rgb = array( hexdec( substr( ltrim( $hex, '#' ), 0, 2 ) ), hexdec( substr( ltrim( $hex, '#' ), 2, 2 ) ), hexdec( substr( ltrim( $hex, '#' ), 4, 2 ) ) );
+		for ( $step = 1; $step <= 20; $step++ ) {
+			$f   = 1 - 0.04 * $step;
+			$out = sprintf( '#%02x%02x%02x', (int) round( $rgb[0] * $f ), (int) round( $rgb[1] * $f ), (int) round( $rgb[2] * $f ) );
+			if ( 1.05 / ( self::luminance( $out ) + 0.05 ) >= 4.5 ) {
+				return $out;
+			}
+		}
+		return '#1d2327';
+	}
+
+	/**
+	 * Black or white text, whichever has the higher WCAG contrast on the background.
+	 *
+	 * @param string $hex Background `#rrggbb`.
+	 * @return string
+	 */
+	public static function text_color( $hex ) {
+		$lum = self::luminance( $hex );
+		if ( null === $lum ) {
+			return '#ffffff';
+		}
+		$dark = self::luminance( '#1d2327' );
+		// Whichever of white and the dark text colour contrasts more.
+		return ( $lum + 0.05 ) / ( $dark + 0.05 ) > 1.05 / ( $lum + 0.05 ) ? '#1d2327' : '#ffffff';
 	}
 }

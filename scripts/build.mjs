@@ -1,11 +1,12 @@
 // Builds the plugin's scripts and styles into plugin/build/:
 //   front/   Script Module (index.js) + style.css for the timetable on the site
-//   editor/  block editor sidebar panel for events (classic script using wp.* globals)
-//   block/   Timetable and Upcoming Classes blocks (classic script using wp.* globals)
+//   editor/  block editor sidebar panel for events  } copied as written: plain scripts on the
+//   block/   Timetable and Upcoming Classes blocks   } wp.* globals, so /* translators: */
+//                                                      comments survive for translate.wordpress.org
 //   admin/   small helpers for the classic admin screens (colour pickers, meta box fallback)
 // Usage: node scripts/build.mjs [--watch]
 import * as esbuild from "esbuild";
-import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, watch as watchFile } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -34,25 +35,23 @@ const configs = [
   },
   {
     ...common,
-    entryPoints: { index: join(root, "src", "editor", "index.js") },
-    outdir: join(out, "editor"),
-    format: "iife",
-  },
-  {
-    ...common,
-    entryPoints: { index: join(root, "src", "block", "index.js") },
-    outdir: join(out, "block"),
-    format: "iife",
-  },
-  {
-    ...common,
     entryPoints: { index: join(root, "src", "admin", "index.js"), style: join(root, "src", "admin", "style.css") },
     outdir: join(out, "admin"),
     format: "iife",
   },
 ];
 
+const plain = ["editor", "block"];
+const copyPlain = () => {
+  for (const dir of plain) {
+    mkdirSync(join(out, dir), { recursive: true });
+    copyFileSync(join(root, "src", dir, "index.js"), join(out, dir, "index.js"));
+  }
+};
+copyPlain();
+
 if (watch) {
+  for (const dir of plain) watchFile(join(root, "src", dir), copyPlain);
   for (const config of configs) await (await esbuild.context(config)).watch();
   console.log("Watching for changes…");
 } else {

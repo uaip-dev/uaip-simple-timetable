@@ -306,7 +306,7 @@ final class Uaip_Timetable_Event {
 
 		if ( 'none' === $rule['repeat'] ) {
 			$date = wp_date( get_option( 'date_format' ), ( new DateTimeImmutable( $rule['date'] . ' 12:00', $tz ) )->getTimestamp() );
-			/* translators: 1: date, 2: time range */
+			/* translators: 1: date or day (e.g. "Tuesday 13 October" or "Today"), 2: time range */
 			return sprintf( __( '%1$s, %2$s', 'uaip-simple-timetable' ), $date, $time );
 		}
 

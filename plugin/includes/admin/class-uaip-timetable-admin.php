@@ -108,7 +108,8 @@ final class Uaip_Timetable_Admin {
 		if ( ! $ours && Uaip_Timetable_Post_Types::CATEGORY !== $screen->taxonomy ) {
 			return;
 		}
-		if ( ! in_array( $hook, array( 'post.php', 'post-new.php', 'edit-tags.php', 'term.php', 'edit.php' ), true ) ) {
+		$settings = false !== strpos( (string) $hook, Uaip_Timetable_Settings_Page::PAGE );
+		if ( ! $settings && ! in_array( $hook, array( 'post.php', 'post-new.php', 'edit-tags.php', 'term.php', 'edit.php' ), true ) ) {
 			return;
 		}
 		wp_enqueue_style( Uaip_Timetable_Assets::ADMIN );

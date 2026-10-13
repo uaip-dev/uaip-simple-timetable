@@ -80,3 +80,28 @@
   grid-template-columns: 1fr 1fr;
   max-height: none;
 }
+
+/* Settings screen */
+.uaip-tt-settings__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px;
+  align-items: start;
+}
+.uaip-tt-settings__help {
+  margin-top: 20px;
+  padding: 4px 16px 8px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+}
+.uaip-tt-settings__help ol {
+  margin-left: 1.2em;
+}
+.uaip-tt-settings__help code {
+  word-break: break-all;
+}
+@media (max-width: 960px) {
+  .uaip-tt-settings__layout {
+    grid-template-columns: 1fr;
+  }
+}

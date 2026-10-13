@@ -64,8 +64,12 @@ final class Uaip_Timetable_Plugin {
 		( new Uaip_Timetable_Rest() )->register_hooks();
 		( new Uaip_Timetable_Single() )->register_hooks();
 
+		// After the post types registered with the current settings.
+		add_action( 'init', array( 'Uaip_Timetable_Settings_Page', 'maybe_flush' ), 99 );
+
 		if ( is_admin() ) {
 			( new Uaip_Timetable_Admin() )->register_hooks();
+			( new Uaip_Timetable_Settings_Page() )->register_hooks();
 		}
 	}
 

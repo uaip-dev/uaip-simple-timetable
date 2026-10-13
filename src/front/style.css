@@ -219,7 +219,6 @@
   display: block;
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
-  opacity: 0.9;
 }
 .uaip-tt-event__title {
   display: block;
@@ -228,7 +227,6 @@
 .uaip-tt-event__meta {
   display: block;
   font-size: 0.75rem;
-  opacity: 0.85;
 }
 
 /* ---------- Week / day grid ---------- */
@@ -258,6 +256,7 @@
   border-left: 1px solid var(--uaip-tt-border);
 }
 .uaip-tt-grid__dayname.is-today .uaip-tt-day__date {
+  opacity: 1;
   display: inline-block;
   padding: 0 6px;
   border-radius: 999px;
@@ -270,7 +269,6 @@
 }
 .uaip-tt-day__date {
   font-weight: 400;
-  opacity: 0.85;
 }
 .uaip-tt-day__short {
   display: none;
@@ -446,10 +444,10 @@
   }
 }
 @container uaip-tt (max-width: 900px) {
-  .uaip-tt-day__long {
+  .uaip-tt-grid__head .uaip-tt-day__long {
     display: none;
   }
-  .uaip-tt-day__short {
+  .uaip-tt-grid__head .uaip-tt-day__short {
     display: inline;
   }
 }
@@ -481,6 +479,7 @@
   border-bottom: 1px solid var(--uaip-tt-border);
 }
 .uaip-tt-month td {
+  position: relative;
   height: 6.5rem;
   padding: 4px;
   vertical-align: top;
@@ -511,7 +510,12 @@
   color: var(--uaip-tt-accent-fg);
 }
 .uaip-tt-month__full {
-  display: none;
+  /* Read by screen readers; shown in the narrow (list) layout. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 .uaip-tt-month__events {
   display: grid;
@@ -523,7 +527,8 @@
 .uaip-tt-month .uaip-tt-event__link {
   display: flex;
   gap: 4px;
-  align-items: baseline;
+  align-items: center;
+  min-height: 24px; /* WCAG 2.2 target size */
   padding: 1px 4px;
   border-radius: 3px;
   font-size: 0.75rem;
@@ -589,7 +594,11 @@
     display: none;
   }
   .uaip-tt-month__full {
-    display: inline;
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
     font-weight: 600;
   }
   .uaip-tt-month__date {
@@ -796,7 +805,11 @@
 /* Month cells are narrow at normal content widths: the title matters more than the time. */
 @container uaip-tt (max-width: 900px) and (min-width: 641px) {
   .uaip-tt-month .uaip-tt-event__time {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
   }
 }
 
