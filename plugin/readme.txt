@@ -142,10 +142,10 @@ No. Everything is free.
 1. Week view with colour-coded categories and overlapping classes side by side.
 2. Event details popup with location, instructor and "Add to calendar".
 3. Month view.
-4. List view and the Upcoming Classes block.
+4. List view.
 5. On a phone: the week as a list per day.
 6. The Schedule panel when editing an event.
-7. The Timetable block and its settings in the editor.
+7. The Timetable block and its settings in the editor (the Upcoming Classes block works the same way).
 8. Settings.
 
 == Privacy ==

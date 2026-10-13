@@ -39,6 +39,9 @@ final class Uaip_Timetable_Renderer {
 		'saturday'  => 6,
 	);
 
+	/** Events this short (minutes) get a one-line card in the grid. */
+	const SHORT_MINUTES = 40;
+
 	/** Most events shown in one month-view day before "+N more". */
 	const MONTH_MAX_PER_DAY = 3;
 
@@ -700,7 +703,7 @@ final class Uaip_Timetable_Renderer {
 									$top   = max( 0, self::minutes( $item['start'] ) - $start_min );
 									$len   = min( $total - $top, self::minutes( $item['end'] ) - self::minutes( $item['start'] ) );
 									$place = sprintf( '--uaip-tt-top:%d;--uaip-tt-len:%d;--uaip-tt-lane:%d;--uaip-tt-lanes:%d', $top, max( 1, $len ), $item['lane'], $item['lanes'] );
-									self::event( $item, $place, ! $typical );
+									self::event( $item, $place, ! $typical, $len <= self::SHORT_MINUTES );
 								}
 								?>
 							</ul>
@@ -931,8 +934,9 @@ final class Uaip_Timetable_Renderer {
 	 * @param array<string,mixed> $item      Occurrence.
 	 * @param string              $placement Extra inline custom properties (grid placement).
 	 * @param bool                $dated     Whether to show the date in the details.
+	 * @param bool                $short     One-line card (short events in the grid).
 	 */
-	private static function event( array $item, $placement, $dated ) {
+	private static function event( array $item, $placement, $dated, $short = false ) {
 		$style   = sprintf( '--uaip-tt-bg:%s;--uaip-tt-fg:%s;', $item['bg_color'], $item['text_color'] ) . $placement;
 		$href    = '' !== $item['url'] ? $item['url'] : $item['permalink'];
 		$details = 'uaip-tt-d-' . ( ++self::$details );
@@ -944,7 +948,7 @@ final class Uaip_Timetable_Renderer {
 			$meta[] = wp_sprintf( '%l', wp_list_pluck( $item['instructors'], 'title' ) );
 		}
 		?>
-		<li class="uaip-tt-event" style="<?php echo esc_attr( $style ); ?>">
+		<li class="<?php echo esc_attr( 'uaip-tt-event' . ( $short ? ' uaip-tt-event--short' : '' ) ); ?>" style="<?php echo esc_attr( $style ); ?>">
 			<a class="uaip-tt-event__link" href="<?php echo esc_url( $href ); ?>" data-details="<?php echo esc_attr( $details ); ?>">
 				<span class="uaip-tt-event__time">
 					<time datetime="<?php echo esc_attr( $item['start_iso'] ); ?>"><?php echo esc_html( Uaip_Timetable_Event::format_time( $item['start'] ) ); ?></time><span aria-hidden="true">–</span><span class="screen-reader-text"><?php esc_html_e( 'to', 'uaip-simple-timetable' ); ?></span><time datetime="<?php echo esc_attr( $item['end_iso'] ); ?>"><?php echo esc_html( Uaip_Timetable_Event::format_time( $item['end'] ) ); ?></time>

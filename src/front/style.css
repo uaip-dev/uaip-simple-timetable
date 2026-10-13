@@ -356,6 +356,38 @@
   order: -1;
   line-height: 1.2;
 }
+.uaip-tt-grid__events .uaip-tt-event__time,
+.uaip-tt-grid__events .uaip-tt-event__meta {
+  /* One line each in the grid; the popover has the full details. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Short events: title and start time on one line; the rest stays for screen readers. */
+.uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__link {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
+  padding-block: 2px;
+}
+.uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__time {
+  flex: none;
+}
+.uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__time span,
+.uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__time time:last-child,
+.uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__meta {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
 /* Narrow day columns: start time only (the end shows in the height and the popover). */
 @container uaip-tt-day (max-width: 140px) {
   .uaip-tt-grid__events .uaip-tt-event__time span,
@@ -438,6 +470,31 @@
   .uaip-tt-grid__events .uaip-tt-event__time {
     grid-row: span 2;
     font-size: 0.8125rem;
+  }
+  .uaip-tt-grid__events .uaip-tt-event__meta {
+    white-space: normal;
+  }
+  .uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__link {
+    display: grid;
+    gap: 0 10px;
+    align-items: start;
+    padding-block: 8px;
+  }
+  .uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__time span,
+  .uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__time time:last-child,
+  .uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__meta {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+  .uaip-tt-grid__events .uaip-tt-event--short .uaip-tt-event__time .screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
   }
   .uaip-tt__nav {
     flex-basis: 100%;
