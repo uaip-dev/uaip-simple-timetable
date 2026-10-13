@@ -2,7 +2,7 @@
 
 A free WordPress plugin for class schedules and timetables: repeating and one-off events,
 locations, instructors and colour-coded categories, shown as a week grid, day, month or
-list. Everything is free; there is no premium version.
+list. Everything in it is free, with no locked features or nags.
 
 Maintained by [UAIP](https://uaip.dev/) (WordPress.org: `uaip`).
 

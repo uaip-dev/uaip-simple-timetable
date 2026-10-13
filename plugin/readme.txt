@@ -8,11 +8,11 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Class schedules and timetables with week, day, month and list views, repeating events, locations and instructors. Free, no premium version.
+Class schedules and timetables with week, day, month and list views, repeating events, locations and instructors. Free, with no locked features.
 
 == Description ==
 
-UAIP Simple Timetable shows your classes, lessons or sessions as a clear timetable. Gyms, studios, schools, clubs and community centres can set up a weekly schedule in minutes. Every feature is free: there is no premium version, no locked settings and no upgrade notices.
+UAIP Simple Timetable shows your classes, lessons or sessions as a clear timetable. Gyms, studios, schools, clubs and community centres can set up a weekly schedule in minutes. Everything in this plugin is free: no locked features, no trial limits and no nag notices.
 
 = Events that repeat =
 
@@ -133,9 +133,9 @@ The timetable uses your theme's fonts and has five colour schemes. Wide and full
 
 It is kept, unless you tick "Also delete all events…" under Timetable → Settings first.
 
-= Is there a premium version? =
+= Is it really free? =
 
-No. Everything is free.
+Yes. Everything in this plugin is free to use on any number of sites, with no locked features, trial limits or nag notices. Optional add-ons (for example for bookings) may come later as separate plugins; they will never lock or remove anything this plugin does.
 
 == Screenshots ==
 

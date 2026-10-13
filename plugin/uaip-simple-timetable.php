@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       UAIP Simple Timetable
  * Plugin URI:        https://github.com/uaip-dev/uaip-simple-timetable
- * Description:       Class schedules and timetables with weekly, daily, monthly and list views, repeating events, locations and instructors. Free, no premium version.
+ * Description:       Class schedules and timetables with weekly, daily, monthly and list views, repeating events, locations and instructors. Free, with no locked features.
  * Version:           0.1.0
  * Requires at least: 6.5
  * Requires PHP:      7.4
