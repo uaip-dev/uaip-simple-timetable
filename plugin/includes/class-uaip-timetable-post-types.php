@@ -294,7 +294,7 @@ final class Uaip_Timetable_Post_Types {
 	}
 
 	/**
-	 * Published locations or instructors as id => title, for selects.
+	 * Published (and readable private) locations or instructors as id => title, for selects.
 	 *
 	 * @param string $post_type self::LOCATION or self::INSTRUCTOR.
 	 * @return array<int,string>
@@ -312,6 +312,10 @@ final class Uaip_Timetable_Post_Types {
 		);
 		$out   = array();
 		foreach ( $posts as $post ) {
+			// Private entries are listed only for users allowed to read them.
+			if ( 'publish' !== $post->post_status && ! current_user_can( 'read_post', $post->ID ) ) {
+				continue;
+			}
 			$out[ $post->ID ] = get_the_title( $post );
 		}
 		return $out;
